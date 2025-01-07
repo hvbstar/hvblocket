@@ -1,11 +1,28 @@
-// Ghi lại phản hồi API vào file log
+try {
+  let obj = JSON.parse($response.body);
 
-const fs = require('fs');
-const logFile = '/path/to/your/logfile.txt'; // Đường dẫn tới file log
+  // Tạo dữ liệu log
+  let logData = {
+    timestamp: new Date().toISOString(),
+    apiResponse: JSON.stringify(obj, null, 2)
+  };
 
-let obj = JSON.parse($response.body);
+  // Gửi log đến server log (cần có API của dịch vụ log)
+  $httpClient.post({
+    url: 'https://your-log-server.com/api/logs', // Thay bằng URL của dịch vụ log của bạn
+    body: logData
+  }, function(error, response, body) {
+    if (error) {
+      console.error("Error sending log:", error);
+    } else {
+      console.log("Log sent successfully.");
+    }
+  });
 
-// Ghi lại phản hồi vào file
-fs.appendFileSync(logFile, `\n\n[${new Date().toISOString()}] API Response: \n${JSON.stringify(obj, null, 2)}`);
+  // Trả lại phản hồi gốc
+  $done({ body: JSON.stringify(obj) });
 
-$done({ body: JSON.stringify(obj) });
+} catch (error) {
+  console.error("Error parsing response:", error);
+  $done({});
+}
