@@ -1,13 +1,14 @@
-// Locket_extra_features.js - Enable Badges & Video 15s
-const response = JSON.parse($response.body);
+// Locket_extra_features.js - Unlock Video 15s & Badge
+let obj = JSON.parse($response.body);
 
-// Bật huy hiệu Locket
-response.features = response.features || {};
-response.features.badge = true;
+// Bật huy hiệu Locket (trái tim vàng)
+if (!obj.features) obj.features = {};
+obj.features.badge = true;
 
-// Cho phép quay video 15s
-response.features.video_duration = 15;
+// Bật quay video 15 giây
+obj.features.video_duration = 15;
 
-console.log("Extra Features Enabled:", JSON.stringify(response, null, 2));
+// In ra log để kiểm tra
+console.log("Modified Features:", JSON.stringify(obj, null, 2));
 
-$done({ body: JSON.stringify(response) });
+$done({ body: JSON.stringify(obj) });
