@@ -12,10 +12,10 @@ try {
   var obj = JSON.parse($response.body);
 } catch (e) {
   console.log("Error parsing response:", e);
-  $done({});
+  $done({});  // Exit early if there's an error parsing the response
 }
 
-// Đảm bảo các key tồn tại
+// Ensure the necessary keys exist
 if (!obj.subscriber) obj.subscriber = {};
 if (!obj.subscriber.entitlements) obj.subscriber.entitlements = {};
 if (!obj.subscriber.subscriptions) obj.subscriber.subscriptions = {};
@@ -40,7 +40,7 @@ var hvb_entitlement = {
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Áp dụng Mapping
+// Apply the mapping
 const match = Object.keys(mapping).find(e => ua.includes(e));
 
 if (match) {
@@ -54,21 +54,21 @@ if (match) {
   obj.subscriber.entitlements["Locket"] = hvb_entitlement;
 }
 
-// Mở khóa huy hiệu Locket
+// Unlock Locket Badge
 obj.subscriber.entitlements["Locket_Badge"] = {
   purchase_date: specificDate,
   product_identifier: "com.hoangvanbao.badge",
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Cho phép quay video 15 giây
+// Allow 15s video recording
 obj.subscriber.entitlements["Locket_Video_15s"] = {
   purchase_date: specificDate,
   product_identifier: "com.hoangvanbao.video.15s",
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Log thông báo
+// Log success message
 obj.Attention = "Chúc mừng Hoàng Văn Bảo! Huy hiệu Locket & Video 15s đã được bật.";
 console.log("Modified Response:", JSON.stringify(obj, null, 2));
 
