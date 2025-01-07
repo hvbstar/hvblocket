@@ -12,14 +12,20 @@ try {
   var obj = JSON.parse($response.body);
 } catch (e) {
   console.log("Error parsing response:", e);
-  $done({});  // Exit early if there's an error parsing the response
+  $done({ body: JSON.stringify({ error: "Failed to parse response" }) });
 }
 
-// Ensure the necessary keys exist
-if (!obj.subscriber) obj.subscriber = {};
-if (!obj.subscriber.entitlements) obj.subscriber.entitlements = {};
-if (!obj.subscriber.subscriptions) obj.subscriber.subscriptions = {};
+if (!obj.subscriber) {
+  obj.subscriber = {};
+}
+if (!obj.subscriber.entitlements) {
+  obj.subscriber.entitlements = {};
+}
+if (!obj.subscriber.subscriptions) {
+  obj.subscriber.subscriptions = {};
+}
 
+// Tạo dữ liệu giả lập cho Hoàng Văn Bảo
 var hoangvanbao = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
@@ -40,36 +46,22 @@ var hvb_entitlement = {
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Apply the mapping
-const match = Object.keys(mapping).find(e => ua.includes(e));
+// Thêm entitlements và subscriptions vào response
+obj.subscriber.subscriptions["com.hoangvanbao.premium.yearly"] = hoangvanbao;
+obj.subscriber.entitlements["Locket"] = hvb_entitlement;
 
-if (match) {
-  let entitlementKey = mapping[match][0] || "Locket";
-  let subscriptionKey = mapping[match][1] || "com.hoangvanbao.premium.yearly";
-
-  obj.subscriber.subscriptions[subscriptionKey] = hoangvanbao;
-  obj.subscriber.entitlements[entitlementKey] = hvb_entitlement;
-} else {
-  obj.subscriber.subscriptions["com.hoangvanbao.premium.yearly"] = hoangvanbao;
-  obj.subscriber.entitlements["Locket"] = hvb_entitlement;
-}
-
-// Unlock Locket Badge
+// Mở khóa huy hiệu Locket và video 15 giây
 obj.subscriber.entitlements["Locket_Badge"] = {
   purchase_date: specificDate,
   product_identifier: "com.hoangvanbao.badge",
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Allow 15s video recording
 obj.subscriber.entitlements["Locket_Video_15s"] = {
   purchase_date: specificDate,
   product_identifier: "com.hoangvanbao.video.15s",
   expires_date: "2099-12-18T01:04:17Z"
 };
 
-// Log success message
-obj.Attention = "Chúc mừng Hoàng Văn Bảo! Huy hiệu Locket & Video 15s đã được bật.";
 console.log("Modified Response:", JSON.stringify(obj, null, 2));
-
 $done({ body: JSON.stringify(obj) });
