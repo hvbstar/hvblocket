@@ -1,6 +1,6 @@
 // Updated deleteHeader.js
 // ========= Header Modification ========= //
-const version = 'V1.0.4'; // Cập nhật phiên bản
+const version = 'V1.0.3';
 
 function setHeaderValue(e, a, d) {
   var r = a.toLowerCase();
@@ -10,15 +10,16 @@ function setHeaderValue(e, a, d) {
 // Lấy headers hiện tại từ request
 var modifiedHeaders = $request.headers;
 
-// Xóa hoặc thay đổi các header cần thiết
-setHeaderValue(modifiedHeaders, "X-RevenueCat-ETag", ""); // Xóa X-RevenueCat-ETag
+// Thay đổi giá trị của X-RevenueCat-ETag và các headers liên quan
+delete modifiedHeaders["X-RevenueCat-ETag"];
+delete modifiedHeaders["If-None-Match"];
+delete modifiedHeaders["Authorization"];
+delete modifiedHeaders["Cookie"];
 
-// Nếu muốn thay đổi nhiều header, thêm chúng vào đây
-setHeaderValue(modifiedHeaders, "Authorization", ""); // Ví dụ: xóa Authorization header
-
-// Debug: In header gốc và header đã sửa để kiểm tra
-console.log("Original Headers:", JSON.stringify($request.headers, null, 2));
-console.log("Modified Headers:", JSON.stringify(modifiedHeaders, null, 2));
+// Debug: In header đã sửa (tuỳ chọn)
+console.log("Modified Headers:", JSON.stringify(modifiedHeaders));
 
 // Kết thúc request với header đã sửa đổi
 $done({ headers: modifiedHeaders });
+
+// ========= Hoàng Văn Bảo ========= //
