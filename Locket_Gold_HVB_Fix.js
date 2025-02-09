@@ -1,46 +1,58 @@
-// Updated Locket_hvb_fix.js - Unlock Gold, Badge & Video 15s
-var specificDate = "2025-01-01T00:00:00Z"; // Cập nhật ngày cụ thể
+// Updated Locket_hvb_fix.js
+// ========= Đặt ngày tham gia là 1/1/2025 ========= //
+var specificDate = "2025-01-01T00:00:00Z"; // Định dạng ISO 8601
 
+// ========= ID Mapping ========= //
 const mapping = {
   '%E8%BD%A6%E7%A5%A8%E7%A5%A8': ['vip+watch_vip'],
-  'Locket': ['Gold']
+  'Locket': ['Gold'] // Đảm bảo rằng Locket Gold được sử dụng đúng cách
 };
 
+// ========= Xóa cache RevenueCat trước khi xử lý ========= //
+if ($request && $request.headers) {
+  delete $request.headers["X-RevenueCat-ETag"];
+  delete $request.headers["If-None-Match"];
+  console.log("Đã xóa cache RevenueCat để kích hoạt lại Locket Gold");
+}
+
+// ========= Kiểm tra và Khởi tạo ========= //
 var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 
+// Bắt lỗi khi parsing response
 try {
   var obj = JSON.parse($response.body);
 } catch (e) {
-  console.log("Error parsing response:", e);
-  $done({});
+  console.log("Error parsing response body:", e);
+  $done({}); // Trả kết quả trống nếu lỗi xảy ra
 }
 
-// Đảm bảo các key tồn tại
-obj.subscriber = obj.subscriber || {};
-obj.subscriber.entitlements = obj.subscriber.entitlements || {};
-obj.subscriber.subscriptions = obj.subscriber.subscriptions || {};
+// Đảm bảo các key cơ bản tồn tại
+if (!obj.subscriber) obj.subscriber = {};
+if (!obj.subscriber.entitlements) obj.subscriber.entitlements = {};
+if (!obj.subscriber.subscriptions) obj.subscriber.subscriptions = {};
 
+// ========= Tạo thông tin gói Locket Gold ========= //
 var hoangvanbao = {
   is_sandbox: false,
   ownership_type: "PURCHASED",
   billing_issues_detected_at: null,
   period_type: "normal",
-  expires_date: "2099-12-18T01:04:17Z",
+  expires_date: "2099-12-18T01:04:17Z", // Ngày hết hạn lâu dài
   grace_period_expires_date: null,
   unsubscribe_detected_at: null,
-  original_purchase_date: specificDate,
-  purchase_date: specificDate,
+  original_purchase_date: specificDate,  // Ngày tham gia
+  purchase_date: specificDate,          // Ngày mua
   store: "app_store"
 };
 
 var hvb_entitlement = {
   grace_period_expires_date: null,
-  purchase_date: specificDate,
+  purchase_date: specificDate, // Ngày tham gia
   product_identifier: "com.hoangvanbao.premium.yearly",
-  expires_date: "2099-12-18T01:04:17Z"
+  expires_date: "2099-12-18T01:04:17Z" // Ngày hết hạn lâu dài
 };
 
-// Áp dụng Mapping
+// ========= Áp dụng Mapping ========= //
 const match = Object.keys(mapping).find(e => ua.includes(e));
 
 if (match) {
@@ -50,31 +62,15 @@ if (match) {
   obj.subscriber.subscriptions[subscriptionKey] = hoangvanbao;
   obj.subscriber.entitlements[entitlementKey] = hvb_entitlement;
 } else {
+  // Gán mặc định nếu không có khớp
   obj.subscriber.subscriptions["com.hoangvanbao.premium.yearly"] = hoangvanbao;
   obj.subscriber.entitlements["Locket"] = hvb_entitlement;
 }
 
-// Mở khóa huy hiệu Locket
-obj.subscriber.entitlements["Locket_Badge"] = {
-  purchase_date: specificDate,
-  product_identifier: "com.hoangvanbao.badge",
-  expires_date: "2099-12-18T01:04:17Z"
-};
-
-// Cho phép quay video 15 giây
-obj.subscriber.entitlements["Locket_Video_15s"] = {
-  purchase_date: specificDate,
-  product_identifier: "com.hoangvanbao.video.15s",
-  expires_date: "2099-12-18T01:04:17Z"
-};
-
-// Log thông báo chi tiết hơn
-console.log("Modified Response:", JSON.stringify(obj, null, 2));
+// ========= Thêm thông báo và Log ========= //
+obj.Attention = "Chúc mừng bạn Hoàng Văn Bảo! Vui lòng không bán hoặc chia sẻ cho người khác!";
 console.log("User-Agent:", ua);
-console.log("Updated Subscription:", JSON.stringify(obj.subscriber.subscriptions, null, 2));
+console.log("Final Modified Response:", JSON.stringify(obj, null, 2));
 
-// Thông báo hoàn thành
-obj.Attention = "Chúc mừng Hoàng Văn Bảo! Huy hiệu Locket & Video 15s đã được bật.";
-
-// Kết thúc với dữ liệu đã sửa đổi
+// ========= Trả kết quả cuối cùng ========= //
 $done({ body: JSON.stringify(obj) });
