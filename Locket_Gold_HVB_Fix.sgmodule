@@ -1,4 +1,4 @@
-#!url=https://raw.githubusercontent.com/hvbstar/hvbvip/main/Locket_Gold_HVB_Fix.sgmodule
+#!url=https://raw.githubusercontent.com/hvbstar/hvblocket/main/Locket_Gold_HVB_Fix.sgmodule
 #!name=Locket-HVB_Gold
 #!desc=Crack By HoangVanBao
 
@@ -6,26 +6,13 @@
 user-agent = Locket/1.0.0 (iPhone; iOS 18.1.1; Scale/3.00)
 
 [Script]
-# Mở khóa Gold
-revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.*\/(receipts$|subscribers\/[^/]+$), script-path=https://raw.githubusercontent.com/hvbstar/hvbvip/main/Locket_Gold_HVB_Fix.js, requires-body=true, max-size=-1, timeout=120
+# ~ By HoangVanBao
+# ~ Enhanced for Shadowrocket, Surge, & LanceX
+revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.*\/(receipts$|subscribers\/[^/]+$), script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/Locket_Gold_HVB_Fix.js, requires-body=true, max-size=-1, timeout=180
 
-# Xóa header kiểm tra
-deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.*\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/hvbstar/hvbvip/main/deleteHeader.js, timeout=120
-
-# Mở khóa Video 15s và Huy hiệu vàng
-extraFeatures = type=http-response, pattern=^https:\/\/api\.locket\.com\/.*\/user/features, script-path=https://raw.githubusercontent.com/hvbstar/hvbvip/main/Locket_extra_features.js, requires-body=true, max-size=-1, timeout=120
-
-# Ghi lại phản hồi API
-apiResponseLog = type=http-response, pattern=^https:\/\/api\.locket\.com\/.*, script-path=https://raw.githubusercontent.com/hvbstar/hvbvip/main/API_Response_Log.js, requires-body=true, timeout=120
-
-# Kiểm tra phản hồi
-checkResponse = type=http-response, pattern=^https:\/\/api\.locket\.com\/.*, script-path=https://raw.githubusercontent.com/hvbstar/hvbvip/main/Check_Response.js, requires-body=true, timeout=120
-
-# Gỡ lỗi nâng cao
-enhancedDebug = type=http-response, pattern=^https:\/\/api\.locket\.com\/.*, script-path=https://raw.githubusercontent.com/hvbstar/hvbvip/main/Enhanced_Debug.js, requires-body=true, timeout=120
-
-# Giám sát các yêu cầu
-monitorRequests = type=http-request, pattern=^https:\/\/api\.locket\.com\/.*, script-path=https://raw.githubusercontent.com/hvbstar/hvbvip/main/Monitor_Requests.js, timeout=120
+deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.*\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/deleteHeader.js, timeout=180
 
 [MITM]
-hostname = api.revenuecat.com, raw.githubusercontent.com, api.locket.com
+hostname = api.revenuecat.com, raw.githubusercontent.com
+
+# ~ Hoàng Văn Bảo
