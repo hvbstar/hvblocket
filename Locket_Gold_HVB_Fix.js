@@ -1,4 +1,4 @@
-// Updated Locket_hvb_fix.js
+// Updated Locket_HVB_Fix.js
 // ========= Đặt ngày tham gia là 1/1/2025 ========= //
 var specificDate = "2025-01-01T00:00:00Z"; // Định dạng ISO 8601
 
