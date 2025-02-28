@@ -8,11 +8,14 @@ user-agent = Locket/1.0.0 (iPhone; iOS 18.1.1; Scale/3.00)
 [Script]
 # ~ By HoangVanBao
 # ~ Enhanced for Shadowrocket, Surge, & LanceX
-revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.*\/(receipts$|subscribers\/[^/]+$), script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/Locket_Gold_HVB_Fix.js, requires-body=true, max-size=-1, timeout=180
+revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.*\/(receipts$|subscribers\/[^/]+$), script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/Locket_Gold_HVB_Fix.js, requires-body=true, max-size=-1, timeout=120
 
-deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.*\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/deleteHeader.js, timeout=180
+deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.*\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/deleteHeader.js, timeout=120
+
+# Fake IP Mỹ bằng cách sửa request header
+fakeIP = type=http-request, pattern=^https:\/\/api\.locket-app\.com\/.*, script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/fakeIP.js, timeout=120
 
 [MITM]
-hostname = api.revenuecat.com, raw.githubusercontent.com
+hostname = api.revenuecat.com, api.locket-app.com, raw.githubusercontent.com
 
 # ~ Hoàng Văn Bảo
