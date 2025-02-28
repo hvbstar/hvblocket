@@ -1,6 +1,6 @@
 // Updated Locket_Gold_HVB_Fix.js
-// ========= Đặt ngày tham gia là 1/1/2025 ========= //
-var specificDate = "2025-01-01T00:00:00Z"; // Định dạng ISO 8601
+// ========= Đặt ngày tham gia là 28/02/2025 ========= //
+var specificDate = "2025-02-28T00:00:00Z"; // Định dạng ISO 8601
 
 // ========= ID Mapping ========= //
 const mapping = {
@@ -8,21 +8,13 @@ const mapping = {
   'Locket': ['Gold'] // Đảm bảo rằng Locket Gold được sử dụng đúng cách
 };
 
-// ========= Xóa cache RevenueCat trước khi xử lý ========= //
-if ($request && $request.headers) {
-  delete $request.headers["X-RevenueCat-ETag"];
-  delete $request.headers["If-None-Match"];
-  console.log("Đã xóa cache RevenueCat để kích hoạt lại Locket Gold");
-}
-
 // ========= Kiểm tra và Khởi tạo ========= //
 var ua = $request.headers["User-Agent"] || $request.headers["user-agent"];
 
-// Bắt lỗi khi parsing response
 try {
   var obj = JSON.parse($response.body);
 } catch (e) {
-  console.log("Error parsing response body:", e);
+  console.log("❌ Error parsing response body:", e);
   $done({}); // Trả kết quả trống nếu lỗi xảy ra
 }
 
@@ -41,7 +33,7 @@ var hoangvanbao = {
   grace_period_expires_date: null,
   unsubscribe_detected_at: null,
   original_purchase_date: specificDate,  // Ngày tham gia
-  purchase_date: specificDate,          // Ngày mua
+  purchase_date: specificDate,           // Ngày mua
   store: "app_store"
 };
 
@@ -68,9 +60,11 @@ if (match) {
 }
 
 // ========= Thêm thông báo và Log ========= //
-obj.Attention = "Chúc mừng bạn Hoàng Văn Bảo! Vui lòng không bán hoặc chia sẻ cho người khác!";
-console.log("User-Agent:", ua);
-console.log("Final Modified Response:", JSON.stringify(obj, null, 2));
+obj.Attention = "🎉 Chúc mừng bạn Hoàng Văn Bảo! Vui lòng không bán hoặc chia sẻ cho người khác!";
+console.log("✅ User-Agent:", ua);
+console.log("✅ Final Modified Response:", JSON.stringify(obj, null, 2));
 
 // ========= Trả kết quả cuối cùng ========= //
 $done({ body: JSON.stringify(obj) });
+
+// ========= Hoàng Văn Bảo ========= //
