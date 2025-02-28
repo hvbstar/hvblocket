@@ -1,22 +1,22 @@
 // Updated deleteHeader.js
-// ========= Xóa Header Gây Lỗi ========= //
-const version = 'V1.0.5';
+// ========= Header Modification ========= //
+const version = 'V1.0.3';
 
-function setHeaderValue(headers, key, value) {
-  var lowerKey = key.toLowerCase();
-  headers[lowerKey] = value;
+function setHeaderValue(e, a, d) {
+  var r = a.toLowerCase();
+  r in e ? e[r] = d : e[a] = d;
 }
 
 // Lấy headers hiện tại từ request
 var modifiedHeaders = $request.headers;
 
-// Xóa giá trị của X-RevenueCat-ETag
+// Thay đổi giá trị của X-RevenueCat-ETag
 setHeaderValue(modifiedHeaders, "X-RevenueCat-ETag", "");
 
-// Debug: In header đã sửa
-console.log("✅ Modified Headers:", JSON.stringify(modifiedHeaders, null, 2));
+// Debug: In header đã sửa (tuỳ chọn)
+console.log("Modified Headers:", JSON.stringify(modifiedHeaders));
 
-// Trả kết quả với header đã chỉnh sửa
+// Kết thúc request với header đã sửa đổi
 $done({ headers: modifiedHeaders });
 
 // ========= Hoàng Văn Bảo ========= //
