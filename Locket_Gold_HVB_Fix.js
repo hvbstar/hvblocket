@@ -1,6 +1,6 @@
 // Updated Locket_Gold_HVB_Fix.js
-// ========= Đặt ngày tham gia là 28/02/2025 ========= //
-var specificDate = "2025-02-28T00:00:00Z"; // Định dạng ISO 8601
+// ========= Đặt ngày tham gia là 1/1/2025 ========= //
+var specificDate = "2025-01-01T00:00:00Z"; // Định dạng ISO 8601
 
 // ========= ID Mapping ========= //
 const mapping = {
@@ -43,6 +43,12 @@ var hvb_entitlement = {
   purchase_date: specificDate, // Ngày tham gia
   product_identifier: "com.hoangvanbao.premium.yearly",
   expires_date: "2099-12-18T01:04:17Z" // Ngày hết hạn lâu dài
+};
+
+// ========= Cố gắng bật âm thanh khi quay video ========= //
+obj.video_settings = {
+  max_duration: 15,
+  allow_audio: true // Thử bật âm thanh
 };
 
 // ========= Áp dụng Mapping ========= //
