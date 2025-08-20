@@ -1,0 +1,2 @@
+# Dummy server list cho Quantumult X (không dùng thật)
+vmess=example.com:443, method=aes-128-gcm, password=password, obfs=wss, obfs-host=example.com, obfs-uri=/, fast-open=false, udp-relay=false, tag=Dummy
