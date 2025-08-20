@@ -1,7 +1,7 @@
-/***** =========================================
+/***** ======================================================
  *  Locket Gold — Quantumult X persistent edition
  *  Author: Hoàng Văn Bảo (HVB)
- *  ========================================= *****/
+ * ====================================================== *****/
 
 const specificDate = "2025-01-01T00:00:00Z";
 const farFuture   = "2099-12-31T23:59:59Z";
@@ -88,5 +88,9 @@ delete headers["ETag"];
 delete headers["etag"];
 headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
 
-// Done
+// Debug log (giữ lại để dễ theo dõi)
+console.log("🔑 HVB Locket Gold patched:", url);
+console.log("👤 User ID:", appUserId || "anonymous");
+console.log("📦 Response:", JSON.stringify(patched));
+
 $done({ body: JSON.stringify(patched), headers });
