@@ -1,0 +1,21 @@
+#!url=https://raw.githubusercontent.com/hvbstar/hvblocket/main/Locket_Gold_HVB.sgmodule
+#!name=Locket-HVB_Gold
+#!desc=Shadowrocket fix for Locket 2.9.x by HoangVanBao (optimized)
+
+[General]
+# Không ép User-Agent toàn cục để tránh nghi ngờ từ app khác
+# user-agent = (remove)
+
+[Script]
+# RevenueCat — ép trả body đã sửa cho receipts/subscribers/offerings
+revenuecat_subs = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/[^\/]+$, requires-body=true, max-size=-1, timeout=120, script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/Locket_hvb_fix.js
+revenuecat_receipts = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/receipts$, requires-body=true, max-size=-1, timeout=120, script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/Locket_hvb_fix.js
+revenuecat_offerings = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/v1\/subscribers\/[^\/]+\/offerings$, requires-body=true, max-size=-1, timeout=120, script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/Locket_hvb_fix.js
+
+# Xoá/ghi đè header cache để tránh 304 Not Modified và ETag
+deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/v1\/(receipts|subscribers\/[^\/]+(\/offerings)?$), timeout=120, script-path=https://raw.githubusercontent.com/hvbstar/hvblocket/main/deleteHeader.js
+
+[MITM]
+hostname = api.revenuecat.com, raw.githubusercontent.com
+
+# ~ Hoàng Văn Bảo (HVB)
