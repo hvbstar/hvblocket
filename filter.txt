@@ -1,0 +1,2 @@
+# Dummy filter list for Quantumult X
+host-suffix, example.com, reject
