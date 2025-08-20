@@ -1,23 +1,27 @@
-// Updated deleteHeader.js
-// ========= Header Modification ========= //
-const version = 'V1.0.4';
+/***** deleteHeader.js — Strip cache/etag to avoid 304 *****/
+// Tác giả: Hoàng Văn Bảo (HVB)
+const H = $request.headers || {};
 
-function setHeaderValue(e, a, d) {
-  var r = a.toLowerCase();
-  r in e ? e[r] = d : e[a] = d;
+function del(k) {
+  if (k in H) delete H[k];
+  const low = k.toLowerCase();
+  if (low in H) delete H[low];
 }
+function set(k, v) { H[k] = v; }
 
-// Lấy headers hiện tại từ request
-var modifiedHeaders = $request.headers;
+[
+  "If-None-Match",
+  "X-RevenueCat-ETag",
+  "If-Modified-Since",
+  "X-Use-ETag",
+  "ETag"
+].forEach(del);
 
-// Thay đổi giá trị của X-RevenueCat-ETag
-setHeaderValue(modifiedHeaders, "X-RevenueCat-ETag", "");
-setHeaderValue(modifiedHeaders, "X-Locket-Audio", "enabled"); // Thử bật âm thanh
+// Đặt thêm các header vô hiệu hoá cache
+set("Cache-Control", "no-cache");
+set("Pragma", "no-cache");
 
-// Debug: In header đã sửa (tuỳ chọn)
-console.log("Modified Headers:", JSON.stringify(modifiedHeaders));
+// (Tuỳ chọn) Khai báo nền tảng để tránh phân nhánh bất thường phía server
+if (!H["X-Platform"]) set("X-Platform", "iOS");
 
-// Kết thúc request với header đã sửa đổi
-$done({ headers: modifiedHeaders });
-
-// ========= Hoàng Văn Bảo ========= //
+$done({ headers: H });
