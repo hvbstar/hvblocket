@@ -1,5 +1,7 @@
-/***** Locket Gold — Quantumult X persistent edition *****/
-/***** Tác giả: Hoàng Văn Bảo (HVB) *****/
+/***** =========================================
+ *  Locket Gold — Quantumult X persistent edition
+ *  Author: Hoàng Văn Bảo (HVB)
+ *  ========================================= *****/
 
 const specificDate = "2025-01-01T00:00:00Z";
 const farFuture   = "2099-12-31T23:59:59Z";
@@ -8,7 +10,7 @@ const entitlementKeys = ["Gold", "Locket", "vip+watch_vip", "premium", "plus"];
 
 function nowISO() { return new Date().toISOString(); }
 
-// Tạo response chuẩn Gold
+// ==== Generate GOLD subscriber info ====
 function genGold(appUserId) {
   let subscriber = {
     original_app_user_id: appUserId || "$RCAnonymousID:hvb",
@@ -50,32 +52,25 @@ function genGold(appUserId) {
   return { subscriber, hvb_patched_at: nowISO() };
 }
 
-// =========== MAIN =========== //
+// =========== MAIN ===========
 const url = $request.url;
-let body = $response.body || "{}";
-let obj;
-
-try {
-  obj = JSON.parse(body);
-} catch {
-  obj = {};
-}
+let obj = {};
+try { obj = JSON.parse($response.body || "{}"); } catch { obj = {}; }
 
 let appUserId = null;
 const m = url.match(/\/v1\/subscribers\/([^\/\?]+)/);
 if (m && m[1]) appUserId = decodeURIComponent(m[1]);
 
 let patched;
+const cacheKey = "HVB_Locket_Gold";
 
-// Kiểm tra cache trước
-let cacheKey = "HVB_Locket_Gold";
+// Check persistent cache
 let cached = $persistentStore.read(cacheKey);
-
 if (cached) {
   try { patched = JSON.parse(cached); } catch {}
 }
 
-// Nếu chưa có cache thì tạo mới và lưu
+// If not cached → generate new & save
 if (!patched) {
   if (/\/v1\/subscribers\/[^\/]+\/offerings$/.test(url)) {
     obj.current_offering_id = "gold";
@@ -87,10 +82,11 @@ if (!patched) {
   $persistentStore.write(JSON.stringify(patched), cacheKey);
 }
 
-// Xóa cache headers để tránh 304
+// Clean headers to avoid 304 / caching issues
 let headers = $response.headers || {};
 delete headers["ETag"];
 delete headers["etag"];
 headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
 
+// Done
 $done({ body: JSON.stringify(patched), headers });
