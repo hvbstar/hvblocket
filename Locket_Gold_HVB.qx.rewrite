@@ -1,0 +1,10 @@
+# ======================================================
+# Locket Gold (Quantumult X) — Rewrite Only
+# Author: Hoàng Văn Bảo (HVB)
+# ======================================================
+
+[rewrite_local]
+^https:\/\/api\.revenuecat\.com\/v1\/(receipts|subscribers\/[^\/]+|subscribers\/[^\/]+\/offerings) url script-response-body https://raw.githubusercontent.com/hvbstar/hvblocket/main/Locket_Gold_HVB.js
+
+[mitm]
+hostname = api.revenuecat.com
